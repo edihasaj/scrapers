@@ -1,0 +1,3 @@
+[submodule "tweedekamer"]
+	path = tweedekamer
+	url = ../../edihasaj/scrape-again.git
