@@ -7,6 +7,7 @@ import aiohttp
 
 from get_video_links import get_links_for_download
 
+logging.basicConfig(level=logging.DEBUG)
 CHUNK_SIZE = 1024 * 1024
 SAVE_PATH = "/data/tweedekamer/content/"
 domain = "https://debatgemist.tweedekamer.nl"

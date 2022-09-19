@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+logging.basicConfig(level=logging.DEBUG)
 domain = "https://debatgemist.tweedekamer.nl"
 archive_urls = [f"{domain}/commissievergaderingen", f"{domain}/plenaire-debatten"]
 options = webdriver.ChromeOptions()

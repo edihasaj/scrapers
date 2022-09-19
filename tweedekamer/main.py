@@ -6,6 +6,8 @@ import aiohttp as aiohttp
 
 from download import download_data
 
+logging.basicConfig(level=logging.DEBUG)
+
 
 async def main():
     logging.info('Starting the application')
