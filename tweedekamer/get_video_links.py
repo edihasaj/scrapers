@@ -1,3 +1,4 @@
+import logging
 import time
 
 from bs4 import BeautifulSoup
@@ -14,11 +15,11 @@ driver = webdriver.Chrome("chromedriver", chrome_options=options)
 
 
 def get_links_for_download():
-    print("loading page and getting links")
+    logging.info('loading page and getting links')
     links = load_page_and_get_links()
     video_links = []
 
-    print("getting links inside the pages")
+    logging.info('getting links inside the pages')
     for link in links:
         driver.get(link)
         time.sleep(2)
@@ -39,7 +40,7 @@ def get_links_for_download():
 
         video_links.append(video_link)
 
-    print(f"{len(video_links)} links")
+    logging.info(f"{len(video_links)} links")
     driver.quit()
     return video_links
 

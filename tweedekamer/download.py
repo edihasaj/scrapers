@@ -1,3 +1,4 @@
+import logging
 import os.path
 import subprocess
 from os.path import exists
@@ -13,14 +14,14 @@ debates_archive_url = f"{domain}/debatten"
 
 
 async def download_data(session: aiohttp.ClientSession):
-    print("Checking if path exists")
+    logging.info("Checking if path exists")
     if not os.path.exists(SAVE_PATH):
         os.mkdir(SAVE_PATH)
 
-    print("getting the download links")
+    logging.info("getting the download links")
     links = get_links_for_download()
 
-    print("downloading the files")
+    logging.info("downloading the files")
     for item in links:
         if 'video' in item:
             file_name = item['video'][-19:-4]
@@ -37,20 +38,20 @@ async def download_data(session: aiohttp.ClientSession):
 
 def download_video_file(url: str, file_name: str):
     if exists(f"{SAVE_PATH}{file_name}.mp3"):
-        print(f"skipping {file_name}.mp3")
+        logging.info(f"skipping {file_name}.mp3")
         return
 
     try:
         subprocess.check_output(
             ["ffmpeg", "-i", url, "-q:a", "0", "-map", "a", f"{SAVE_PATH}{file_name}.mp3"])
     except Exception as e:
-        print('Error with Img cmd tool {0}'.format(e))
+        logging.error('Error with Img cmd tool {0}'.format(e))
 
 
 async def download_transcript_file(session: aiohttp.ClientSession, url: str, page: str,
                                    file_name: str):
     if exists(f"{SAVE_PATH}{file_name}.txt"):
-        print(f"skipping {file_name}.txt")
+        logging.info(f"skipping {file_name}.txt")
         return
 
     form_data = aiohttp.FormData()
@@ -59,8 +60,8 @@ async def download_transcript_file(session: aiohttp.ClientSession, url: str, pag
     form_data.add_field("form_id", "debatgemist_download_video_form")
 
     async with session.post(page, data=form_data) as response:
-        print(f"writing {file_name}.txt")
+        logging.info(f"writing {file_name}.txt")
         with open(f"{SAVE_PATH}{file_name}.txt", 'wb') as outfile:
             async for chunk in response.content.iter_chunked(CHUNK_SIZE):
                 outfile.write(chunk)
-        print(f"done writing {file_name}.txt")
+        logging.info(f"done writing {file_name}.txt")

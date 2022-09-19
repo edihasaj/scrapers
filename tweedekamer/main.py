@@ -1,3 +1,5 @@
+import logging
+
 import asyncio
 
 import aiohttp as aiohttp
@@ -6,12 +8,12 @@ from download import download_data
 
 
 async def main():
-    print("Starting the application")
+    logging.info('Starting the application')
 
     async with aiohttp.ClientSession() as session:
         await download_data(session)
 
-    print("Finished downloading")
+    logging.info('Finished downloading')
 
 
 loop = asyncio.get_event_loop()
