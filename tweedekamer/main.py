@@ -6,6 +6,8 @@ from download import download_data
 
 
 async def main():
+    print("Starting the application")
+
     async with aiohttp.ClientSession() as session:
         await download_data(session)
 

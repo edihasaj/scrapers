@@ -10,14 +10,15 @@ options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
 options.add_argument('--incognito')
 options.add_argument('--headless')
-driver = webdriver.Chrome("C:\\Users\\ediha\\PycharmProjects\\scrape-again\\venv\\Lib"
-                          + "\\chromedriver.exe", chrome_options=options)
+driver = webdriver.Chrome("chromedriver", chrome_options=options)
 
 
 def get_links_for_download():
+    print("loading page and getting links")
     links = load_page_and_get_links()
     video_links = []
 
+    print("getting links inside the pages")
     for link in links:
         driver.get(link)
         time.sleep(2)

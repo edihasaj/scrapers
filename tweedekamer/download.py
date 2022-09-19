@@ -7,17 +7,20 @@ import aiohttp
 from get_video_links import get_links_for_download
 
 CHUNK_SIZE = 1024 * 1024
-SAVE_PATH = "C:\\Users\\ediha\\Downloads\\videos\\"
+SAVE_PATH = "/data/tweedekamer/content/"
 domain = "https://debatgemist.tweedekamer.nl"
 debates_archive_url = f"{domain}/debatten"
 
 
 async def download_data(session: aiohttp.ClientSession):
+    print("Checking if path exists")
     if not os.path.exists(SAVE_PATH):
         os.mkdir(SAVE_PATH)
 
+    print("getting the download links")
     links = get_links_for_download()
 
+    print("downloading the files")
     for item in links:
         if 'video' in item:
             file_name = item['video'][-19:-4]
