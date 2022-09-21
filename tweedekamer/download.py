@@ -29,12 +29,12 @@ async def download_data(session: aiohttp.ClientSession):
 
         if 'video' in item:
             if len(item['video']) < 19:
-                file_name = index + '_video_unnamed.bin'
+                file_name = str(index) + '_video_unnamed.bin'
             else:
                 file_name = item['video'][-19:-4]
         else:
             if 'transcript' not in item or len(item['transcript']) < 19:
-                file_name = index + '_transcript_unnamed.bin'
+                file_name = str(index) + '_transcript_unnamed.bin'
             else:
                 file_name = item['transcript'][-19:-4]
 
