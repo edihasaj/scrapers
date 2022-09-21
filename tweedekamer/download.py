@@ -23,8 +23,12 @@ async def download_data(session: aiohttp.ClientSession):
     links = get_links_for_download()
 
     logging.info("downloading the files")
-    for item in links:
-        if 'video' in item:
+    for index, item in links:
+        logging.info(f"downloading {index} of {len(links)}")
+
+        if len(item) < 19:
+            file_name = index + 'unnamed.bin'
+        elif 'video' in item:
             file_name = item['video'][-19:-4]
         else:
             file_name = item['transcript'][-19:-4]
