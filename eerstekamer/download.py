@@ -41,6 +41,9 @@ def scrape_data(url):
     links = get_links(links, driver.page_source)
     logging.info(f"found {len(links)} links")
 
+    logging.info('getting next page')
+    next_page = get_next_page(driver.page_source)
+
     for link in links:
         logging.info(f"loading {link}")
         driver.get(link)
@@ -56,25 +59,24 @@ def scrape_data(url):
         logging.info(f"finished {link}")
 
     logging.info('finished links, getting next page')
-    next_page = get_next_page(driver.page_source)
     driver.quit()
     return next_page
 
 
 def get_next_page(page_source: str):
     soup = BeautifulSoup(page_source, 'lxml')
-    spans = soup.findAll('span')
-    span_list = []
+    links = soup.findAll('a', href=True)
+    link_list = []
 
-    for span in spans:
-        if span.text == 'volgende':
-            span_list.append(span['href'])
+    for link in links:
+        if 'volgende' in link.text:
+            link_list.append(domain + link['href'])
 
-    if len(span_list) <= 0:
+    if len(link_list) <= 0:
         logging.info('no next page')
         return
 
-    return span_list[0]
+    return link_list[0]
 
 
 def get_links(current_list: [str], page_source: str):

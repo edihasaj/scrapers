@@ -1,8 +1,5 @@
-import logging
-
 import asyncio
-
-import aiohttp as aiohttp
+import logging
 
 from download import download_data
 
@@ -11,10 +8,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 async def main():
     logging.info('Starting the application')
-
-    async with aiohttp.ClientSession() as session:
-        await download_data(session)
-
+    await download_data()
     logging.info('Finished downloading')
 
 
