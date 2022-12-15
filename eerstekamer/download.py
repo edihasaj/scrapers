@@ -39,14 +39,23 @@ def scrape_data(url):
     time.sleep(1)
 
     links = get_links(links, driver.page_source)
+    logging.info(f"found {len(links)} links")
 
     for link in links:
+        logging.info(f"loading {link}")
         driver.get(link)
         time.sleep(1)
-        video_link = get_video_link(driver.page_source)
-        download_text_data(driver.page_source, link.split('/')[-2])
-        download_audio_file(video_link, link.split('/')[-2])
 
+        video_link = get_video_link(driver.page_source)
+
+        logging.info(f"link loaded {video_link}, downloading text")
+        download_text_data(driver.page_source, link.split('/')[-2])
+
+        logging.info(f"downloading audio {video_link}")
+        download_audio_file(video_link, link.split('/')[-2])
+        logging.info(f"finished {link}")
+
+    logging.info('finished links, getting next page')
     next_page = get_next_page(driver.page_source)
     driver.quit()
     return next_page
@@ -62,6 +71,7 @@ def get_next_page(page_source: str):
             span_list.append(span['href'])
 
     if len(span_list) <= 0:
+        logging.info('no next page')
         return
 
     return span_list[0]
@@ -87,6 +97,7 @@ def get_video_link(page_source: str):
             link_list.append(link['href'])
 
     if len(link_list) <= 0:
+        logging.info('no video link')
         return
 
     return link_list[0]
@@ -95,10 +106,11 @@ def get_video_link(page_source: str):
 def download_text_data(page_source: str, file_name: str):
     text = extract_text(page_source)
     if not text:
+        logging.info('no text found')
         return
 
     if exists(f"{SAVE_PATH}{file_name}.txt"):
-        logging.info(f"skipping {file_name}.txt")
+        logging.info(f"skipping {file_name}.txt as it exists")
         return
 
     with open(f"{SAVE_PATH}{file_name}.txt", "w", encoding="utf-8") as f:
@@ -117,7 +129,7 @@ def download_audio_file(url: str, file_name: str):
         return
 
     if exists(f"{SAVE_PATH}{file_name}.mp3"):
-        logging.info(f"skipping {file_name}.mp3")
+        logging.info(f"skipping {file_name}.mp3 as it exists")
         return
 
     try:
